@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minhas Metas Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #0f172a; color: white; font-family: sans-serif; }
+        .card { background: #1e293b; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+    </style>
+</head>
+<body class="p-5">
+    <div class="max-w-md mx-auto">
+        <header class="mb-8 text-center">
+            <h1 class="text-3xl font-bold text-blue-400">MetaFoco</h1>
+            <p class="text-gray-400">Gerencie seus objetivos</p>
+        </header>
+
+        <div class="card mb-6">
+            <input id="metaInput" type="text" placeholder="Digite uma nova meta..." class="w-full p-3 rounded bg-slate-700 border-none text-white focus:ring-2 focus:ring-blue-500 outline-none">
+            <button onclick="addMeta()" class="w-full mt-3 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded transition">Adicionar Meta</button>
+        </div>
+
+        <ul id="listaMetas" class="space-y-3">
+            </ul>
+    </div>
+
+    <script>
+        const input = document.getElementById('metaInput');
+        const lista = document.getElementById('listaMetas');
+
+        // Carregar metas do navegador
+        let metas = JSON.parse(localStorage.getItem('minhasMetas')) || [];
+
+        function render() {
+            lista.innerHTML = '';
+            metas.forEach((meta, index) => {
+                const li = document.createElement('li');
+                li.className = 'card flex justify-between items-center animate-in fade-in duration-300';
+                li.innerHTML = `
+                    <span>${meta}</span>
+                    <button onclick="removeMeta(${index})" class="text-red-400 hover:text-red-600">Remover</button>
+                `;
+                lista.appendChild(li);
+            });
+            localStorage.setItem('minhasMetas', JSON.stringify(metas));
+        }
+
+        function addMeta() {
+            if (input.value.trim() !== '') {
+                metas.push(input.value);
+                input.value = '';
+                render();
+            }
+        }
+
+        function removeMeta(index) {
+            metas.splice(index, 1);
+            render();
+        }
+
+        render();
+    </script>
+</body>
+</html>
